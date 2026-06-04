@@ -1,7 +1,7 @@
 # TODO List for Digital Twin Project
 
 ## Phase 1 – Planning & Setup
-- **Initialize Git** – Create a local repository to track progress.
+<!-- - **Initialize Git** – Create a local repository to track progress. -->
 - **Design DB schema** – Model heartbeat data in PostgreSQL; optimise for "latest status per host" queries.
 - **Plan API** – Define URL paths and response shapes for ingestion and reporting endpoints.
 - **Track AI usage** – Keep a scratchpad of prompts for later explanation.

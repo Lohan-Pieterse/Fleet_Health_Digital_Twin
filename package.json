@@ -1,0 +1,28 @@
+{
+  "name": "fleet_health_digital_twin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lohan-Pieterse/Fleet_Health_Digital_Twin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Lohan-Pieterse/Fleet_Health_Digital_Twin/issues"
+  },
+  "homepage": "https://github.com/Lohan-Pieterse/Fleet_Health_Digital_Twin#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
