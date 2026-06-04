@@ -1,21 +1,19 @@
+// routes/server.routes.js
 const express = require("express");
 const router = express.Router();
+const {
+  getHello,
+  setupDb,
+  receiveHeartbeat,
+  getHost,
+} = require("../controllers/server_controller");
 
-router.get("/", (req, res) => {
-  res.send("Hello World! for api");
-});
+router.get("/", getHello);
 
-router.post("/heartbeat", (req, res) => {
-  console.log("Received heartbeat:", req.body);
-  res.status(200).send("Heartbeat received");
-});
+router.get("/setup", setupDb);
 
-router.get("/host/:hostname", (req, res) => {
-  const hostname = req.params.hostname;
-  console.log("Received request for host:", hostname);
-  res.status(200).send(`Host: ${hostname}`);
-});
+router.post("/heartbeat", receiveHeartbeat);
 
-
+router.get("/host/:hostname", getHost);
 
 module.exports = router;

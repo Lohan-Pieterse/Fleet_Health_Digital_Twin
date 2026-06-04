@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: P@ssW0rd123
+      POSTGRES_DB: server_health_db
+    
+  app:
+    build: .
+    image: fleet_health_digital_twin
+    ports:
+      - 13000:3000
+    volumes:
+      - .:/app                  
+      - /app/node_modules
