@@ -1,16 +1,23 @@
 services:
   db:
-    image: postgres
+    image: postgres:16-alpine
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: P@ssW0rd123
-      POSTGRES_DB: server_health_db
-    
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/index.sql:/docker-entrypoint-initdb.d/index.sql
+
   app:
     build: .
     image: fleet_health_digital_twin
     ports:
       - 13000:3000
     volumes:
-      - .:/app                  
+      - .:/app
       - /app/node_modules
+    environment:
+      - DB_HOST=db
+volumes:
+  postgres_data:
