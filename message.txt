@@ -1,0 +1,28 @@
+Hi Lohan,
+I hope all is well!
+
+Apologies for the delayed sending through - we were waiting on final approvals from the team. Please to let you know it's all systems go!
+
+We'd like to invite you to complete a take-home assignment. This task lets you show your practical skills and how you solve problems.
+
+📝 Assessment details
+• The assessment isn't timed. It usually takes four hours to finish.
+• You'll implement a specific set of requirements and record an explainer video.
+• You can use Al tools to help you. If you do, please include the prompts you used and explain your thinking. We want to see how you used these tools to reach your solution.
+
+📽️ Recording your video
+The video is a vital part of our review. Rather than just walking through the code, use this time to go in-depth on your implementation. Explain why you made certain choices, why you chose one approach over another, and what you decided not to do. We use this to understand your reasoning.
+We recommend using Loom for this; please check that your audio works.
+
+📥 Submission requirements
+• Ensure your repository is public or shared with karin@offerzen.com and with me via OfferZen.
+• We can only evaluate your submission if it includes both the repository and the video.
+
+🎤 The technical interview
+Your take-home assignment forms the basis of the technical interview. You'll need to discuss what you built, explain your code in detail, and talk through the tradeoffs in your architecture.
+
+Just to note, your assessment is due in 72 hours, but as discussed the sooner the better.
+
+Let me know if you have any questions
+
+Goodluck
