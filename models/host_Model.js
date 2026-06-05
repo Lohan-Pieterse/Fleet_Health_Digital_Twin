@@ -1,9 +1,12 @@
 const { pool } = require("../config/db");
 
+const HEALTH_THRESHOLD_SECONDS = 60;
+
 /*
  update_Host,
   getAllHosts,
   getHostById,
+  getHostsSummary,
 */
 
 const update_Host = async (
@@ -26,18 +29,11 @@ const update_Host = async (
       try {
         details = JSON.stringify(details);
       } catch (error) {
-        console.error("Error processing host details:", error);
+        console.error(JSON.stringify({ level: "error", message: "Error processing host details", timestamp: new Date().toISOString(), error: error.message }));
       }
     }
 
-    console.log("Upserting host:", {
-      hostId,
-      ip,
-      eventType,
-      timestamp,
-      details,
-      status,
-    }); // Debug log
+    console.log(JSON.stringify({ level: "info", message: `Upserting host: ${hostId}`, timestamp: new Date().toISOString() }));
 
     const { rows } = await pool.query(
       `INSERT INTO hosts (host_id, ip, last_event_type, last_event_timestamp, last_event_details, status)
@@ -53,7 +49,7 @@ const update_Host = async (
     );
     return rows[0];
   } catch (error) {
-    console.error("Error upserting host:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error upserting host", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -66,21 +62,31 @@ const getAllHosts = async (limit) => {
     );
     return rows;
   } catch (error) {
-    console.error("Error fetching all hosts:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching all hosts", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
 
 const getHostById = async (hostId) => {
   try {
-    console.log("Fetching host by id:", hostId); // Debug log
+    console.log(JSON.stringify({ level: "info", message: `Fetching host by id: ${hostId}`, timestamp: new Date().toISOString() }));
     const { rows } = await pool.query(
       `SELECT * FROM hosts h WHERE h.host_id = $1 LIMIT 1`,
       [hostId],
     );
     return rows[0];
   } catch (error) {
-    console.error("Error fetching host by id:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching host by id", timestamp: new Date().toISOString(), error: error.message }));
+    return null;
+  }
+};
+
+const getHostsSummary = async () => {
+  try {
+    const { rows } = await pool.query(`SELECT * from hosts`, []);
+    return rows;
+  } catch (error) {
+    console.error(JSON.stringify({ level: "error", message: "Error fetching hosts summary", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -89,5 +95,7 @@ module.exports = {
   update_Host,
   getAllHosts,
   getHostById,
+  getHostsSummary,
+
   // GetLatestDataByHostId,
 };

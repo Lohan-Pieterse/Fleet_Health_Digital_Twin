@@ -5,27 +5,40 @@ const {
   getLatestIncidentAllHosts,
 } = require("../models/incident_Model");
 const { update_Host } = require("../models/host_Model");
-
 const handleIngestIncident = async (req, res) => {
+  let host;
   try {
-    const { host, timestamp, type, message, ip } = req.body;
-    console.log("Received incident:", { host, timestamp, type, message, ip });
+    const { timestamp, type, message, ip } = req.body;
+    host = req.body.host;
+    console.log(
+      JSON.stringify({
+        level: "info",
+        message: "Received incident",
+        timestamp: new Date().toISOString(),
+        hostId: host,
+        type: type,
+        ip: ip,
+      }),
+    );
     if (!host || !timestamp || !type || !message || !ip) {
       return res
         .status(400)
         .json({ error: "host, timestamp, type, message and ip are required" });
     }
 
-    await update_Host(host, ip, "incident", timestamp, message,"unhealthy");
+    await update_Host(host, ip, "incident", timestamp, message, "unhealthy");
     const incident = await insertIncident(host, timestamp, type, message);
 
-    return res.status(201).json({ data: await getIncidentsByHost(host, 1) });
+    return res.status(200).json({ data: await getIncidentsByHost(host, 1) });
   } catch (error) {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleIngestIncident",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleIngestIncident",
-        message: error.message,
+        hostId: host,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -51,8 +64,10 @@ const handleGetRecentIncidents = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetRecentIncidents",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetRecentIncidents",
-        message: error.message,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -67,8 +82,10 @@ const handleGetLatestIncidentAllHosts = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetLatestIncidentAllHosts",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetLatestIncidentAllHosts",
-        message: error.message,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -99,8 +116,11 @@ const handleGetLatestIncidentAllHosts = async (req, res) => {
 //     console.error(
 //       JSON.stringify({
 //         level: "error",
+//         message: "Error in handleGetIncidentsByHost",
+//         timestamp: new Date().toISOString(),
+//         error: error.message,
 //         event: "handleGetIncidentsByHost",
-//         message: error.message,
+//         hostId: hostId,
 //       }),
 //     );
 //     return res.status(500).json({ error: "Internal server error" });

@@ -11,25 +11,27 @@ const { update_Host } = require("../models/host_Model");
   handleGetLatestHeartbeatByHost,
   handleGetLatestHeartbeatAllHosts,
 */
-
 const handleIngestHeartbeat = async (req, res) => {
+  let host;
   try {
-    const { host, timestamp, cpu_load, mem_used_mb, services, ip } = req.body;
-    console.log("Received heartbeat:", {
-      host,
-      timestamp,
-      cpu_load,
-      mem_used_mb,
-      services,
-      ip,
-    });
+    const { timestamp, cpu_load, mem_used_mb, services, ip } = req.body;
+    host = req.body.host;
+    console.log(
+      JSON.stringify({
+        level: "info",
+        message: "Received heartbeat",
+        timestamp: new Date().toISOString(),
+        hostId: host,
+        ip: ip,
+      }),
+    );
     if (!host || !timestamp || cpu_load == null || mem_used_mb == null || !ip) {
       return res.status(400).json({
         error: "host, timestamp, cpu_load, mem_used_mb and ip are required",
       });
     }
 
-    await update_Host(host, ip, "heartbeat", timestamp, services,"healthy");
+    await update_Host(host, ip, "heartbeat", timestamp, services, "healthy");
     const heartbeat = await insertHeartbeat(
       host,
       timestamp,
@@ -38,13 +40,16 @@ const handleIngestHeartbeat = async (req, res) => {
       services ?? [],
     );
 
-    return res.status(201).json({ data: heartbeat });
+    return res.status(200).json({ data: heartbeat });
   } catch (error) {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleIngestHeartbeat",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleIngestHeartbeat",
-        message: error.message,
+        hostId: host,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -68,8 +73,11 @@ const handleGetLatestHeartbeatByHost = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetLatestHeartbeatByHost",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetLatestHeartbeatByHost",
-        message: error.message,
+        hostId: hostId,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -84,8 +92,10 @@ const handleGetLatestHeartbeatAllHosts = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetLatestHeartbeatAllHosts",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetLatestHeartbeatAllHosts",
-        message: error.message,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -113,8 +123,11 @@ const handleGetHeartbeatHistory = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetHeartbeatHistory",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetHeartbeatHistory",
-        message: error.message,
+        hostId: hostId,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });

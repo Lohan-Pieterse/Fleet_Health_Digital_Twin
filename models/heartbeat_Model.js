@@ -15,7 +15,7 @@ const insertHeartbeat = async (
     );
     return await getLatestHeartbeatByHost(hostId);
   } catch (error) {
-    console.error("Error inserting heartbeat:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error inserting heartbeat", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -31,7 +31,7 @@ const getLatestHeartbeatByHost = async (hostId) => {
     );
     return rows[0] ?? null;
   } catch (error) {
-    console.error("Error fetching latest heartbeat for host:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching latest heartbeat for host", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -46,7 +46,7 @@ const getLatestHeartbeatAllHosts = async () => {
     );
     return rows;
   } catch (error) {
-    console.error("Error fetching latest heartbeats for all hosts:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching latest heartbeats for all hosts", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -70,7 +70,7 @@ const getHeartbeatHistory = async (hostId, limit = 50) => {
 
     return rows;
   } catch (error) {
-    console.error("Error fetching heartbeat history:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching heartbeat history", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };

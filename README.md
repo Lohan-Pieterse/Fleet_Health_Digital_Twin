@@ -39,9 +39,6 @@ A lightweight Node.js/Express service that provides a digital twin for fleet hea
    POSTGRES_PASSWORD=postgres
    POSTGRES_DB=postgres
    DB_HOST=db
-   DB_USER=postgres
-   DB_PASSWORD=postgres
-   DB_NAME=postgres
    ```
 4. **Initialize the database schema** (optional – Docker will run `config/index.sql` on first start). Ensure the `config` folder contains `index.sql`.
 
@@ -65,7 +62,7 @@ A lightweight Node.js/Express service that provides a digital twin for fleet hea
 The API will be reachable at `http://localhost:13000`. Health can be checked with:
 
 ```bash
-curl http://localhost:3000/api/server/health
+curl http://localhost:13000/api/server/health
 ```
 
 ### Option 2 – Direct Node execution (for rapid iteration)
@@ -81,15 +78,15 @@ The server listens on port **3000** by default. Ensure the PostgreSQL container 
 
 ## Helper Commands (`ops.sh`)
 
-| Command | Description |
-|---------|-------------|
-| `./ops.sh start`    | Starts containers in detached mode. |
-| `./ops.sh stop`     | Stops and removes containers. |
-| `./ops.sh restart`  | Restarts the stack. |
-| `./ops.sh status`   | Shows container status. |
-| `./ops.sh logs`     | Streams live logs (all services). |
+| Command             | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| `./ops.sh start`    | Starts containers in detached mode.                                  |
+| `./ops.sh stop`     | Stops and removes containers.                                        |
+| `./ops.sh restart`  | Restarts the stack.                                                  |
+| `./ops.sh status`   | Shows container status.                                              |
+| `./ops.sh logs`     | Streams live logs (all services).                                    |
 | `./ops.sh snapshot` | Creates a `config/sqlbackups/backup_<timestamp>.sql` dump of the DB. |
-| `./ops.sh seed`     | Placeholder for seeding data (extend as needed). |
+| `./ops.sh seed`     | Placeholder for seeding data (extend as needed).                     |
 
 ---
 
@@ -102,7 +99,7 @@ The repository includes a simple health endpoint:
 You can test it locally with:
 
 ```bash
-curl http://localhost:3000/api/server/health
+curl http://localhost:13000/api/server/health
 ```
 
 Add further routes under `routes/` and controllers under `controllers/` as the project evolves.
@@ -124,16 +121,3 @@ Add further routes under `routes/` and controllers under `controllers/` as the p
 ```
 
 ---
-
-## Contributing
-
-1. Fork the repository.
-2. Create a feature branch.
-3. Ensure linting passes (`npm run lint` if configured).
-4. Open a Pull Request with a clear description of changes.
-
----
-
-## License
-
-This project is licensed under the **ISC** license. See the `LICENSE` file for details.

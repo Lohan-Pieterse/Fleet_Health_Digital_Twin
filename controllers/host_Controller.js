@@ -2,18 +2,27 @@ const {
   update_Host,
   getAllHosts,
   getHostById,
+  getHostsSummary,
 } = require("../models/host_Model");
-
 const handleUpsertHost = async (req, res) => {
+  let host;
   try {
-    const { host, ip, eventType, eventTimestamp, eventDetails, status } =
+    const { ip, eventType, eventTimestamp, eventDetails, status } =
       req.body;
+    host = req.body.host;
 
     if (!host || !ip) {
       return res.status(400).json({ error: "host and ip are required" });
     }
     if (!eventType || !eventTimestamp || !eventDetails) {
-      console.log("Warning one of the elements in req.body is empty", req.body);
+      console.log(
+        JSON.stringify({
+          level: "info",
+          message: "Warning: one of the elements in req.body is empty",
+          timestamp: new Date().toISOString(),
+          hostId: host,
+        }),
+      );
     }
     const result = await update_Host(
       host,
@@ -31,8 +40,11 @@ const handleUpsertHost = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleUpsertHost",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleUpsertHost",
-        message: error.message,
+        hostId: host,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -54,8 +66,10 @@ const handleGetAllHosts = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetAllHosts",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetAllHosts",
-        message: error.message,
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -77,8 +91,29 @@ const handleGetHostById = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
+        message: "Error in handleGetHostById",
+        timestamp: new Date().toISOString(),
+        error: error.message,
         event: "handleGetHostById",
-        message: error.message,
+        hostId: hostId,
+      }),
+    );
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const handleGetHostsSummary = async (req, res) => {
+  try {
+    const summary = await getHostsSummary();
+    return res.status(200).json({ data: summary });
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        level: "error",
+        message: "Error in handleGetHostsSummary",
+        timestamp: new Date().toISOString(),
+        error: error.message,
+        event: "handleGetHostsSummary",
       }),
     );
     return res.status(500).json({ error: "Internal server error" });
@@ -89,4 +124,5 @@ module.exports = {
   handleUpsertHost,
   handleGetAllHosts,
   handleGetHostById,
+  handleGetHostsSummary,
 };

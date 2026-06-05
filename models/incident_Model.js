@@ -9,7 +9,7 @@ const insertIncident = async (hostId, hostTs, type, message) => {
     );
     return rows[0];
   } catch (error) {
-    console.error("Error inserting incident:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error inserting incident", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -25,7 +25,7 @@ const getIncidentsByHost = async (hostId, limit = 20) => {
     );
     return rows;
   } catch (error) {
-    console.error("Error fetching incidents for host:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching incidents for host", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -40,7 +40,7 @@ const getRecentIncidents = async (limit = 50) => {
     );
     return rows;
   } catch (error) {
-    console.error("Error fetching recent incidents:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching recent incidents", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
@@ -59,7 +59,7 @@ ORDER BY host_id, host_timestamp DESC;`,
     );
     return rows;
   } catch (error) {
-    console.error("Error fetching latest incidents for all hosts:", error);
+    console.error(JSON.stringify({ level: "error", message: "Error fetching latest incidents for all hosts", timestamp: new Date().toISOString(), error: error.message }));
     return null;
   }
 };
