@@ -104,6 +104,8 @@ const handleGetHostById = async (req, res) => {
 
 const handleGetHostsSummary = async (req, res) => {
   try {
+    console.log("getting summary now")
+
     const summary = await getHostsSummary();
     return res.status(200).json({ data: summary });
   } catch (error) {

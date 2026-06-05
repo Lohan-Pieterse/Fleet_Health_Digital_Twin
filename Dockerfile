@@ -11,6 +11,7 @@ COPY controllers ./controllers
 COPY models ./models
 COPY routes ./routes
 
+
 FROM node:20-alpine AS production
 
 WORKDIR /app
@@ -31,4 +32,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD wget -qO- http://localhost:3000/api/server/health || exit 1
 
-CMD ["node", "server.js"]
+CMD ["npm","run" "dev"]

@@ -12,7 +12,7 @@ const {
 } = require("../controllers/host_Controller");
 
 router.post("/", handleUpsertHost);
-router.get("/", handleGetAllHosts);
+// router.get("/", handleGetAllHosts);
 router.get("/summary", handleGetHostsSummary);
 router.get("/status/:hostId", handleGetHostById);
 

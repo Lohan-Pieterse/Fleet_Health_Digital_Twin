@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World!ss");
 });
 
 app.use("/api/hosts", require("./routes/host_Routes"));
@@ -23,6 +23,7 @@ app.use("/api/heartbeat", require("./routes/heartbeat_Routes"));
 app.use("/api/server", require("./routes/server_Routes"));
 
 app.use("/api/incidents", require("./routes/incident_Routes"));
+
 
 const server = app.listen(port, () => {
   console.log(
