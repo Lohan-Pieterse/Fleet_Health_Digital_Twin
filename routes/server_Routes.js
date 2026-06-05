@@ -2,13 +2,12 @@ const express = require("express");
 const { pool } = require("../config/db");
 
 const router = express.Router();
-const {
-  handleIngestHeartbeat,
-} = require("../controllers/heartbeat_Controller");
+// const {
+//   handleIngestHeartbeat,
+// } = require("../controllers/heartbeat_Controller");
 
-router.post("/heartbeat", handleIngestHeartbeat);
+// router.post("/heartbeat", handleIngestHeartbeat);
 
-// routes/health.js
 async function healthHandler(req, res) {
   try {
     await pool.query("SELECT 1");

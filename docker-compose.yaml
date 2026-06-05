@@ -31,8 +31,12 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
-      interval: 15s
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:3000/api/server/health || exit 1",
+        ]
+      interval: 5s
       timeout: 5s
       retries: 3
       start_period: 20s
