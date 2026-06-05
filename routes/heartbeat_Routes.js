@@ -9,7 +9,7 @@ const {
 
 router.post("/", handleIngestHeartbeat);
 router.get("/", handleGetLatestHeartbeatAllHosts);
-router.get("/:hostId/latest", handleGetLatestHeartbeatByHost);
-router.get("/:hostId/history", handleGetHeartbeatHistory);
+router.get("/latest/:hostId", handleGetLatestHeartbeatByHost);
+router.get("/history/:hostId", handleGetHeartbeatHistory);
 
 module.exports = router;

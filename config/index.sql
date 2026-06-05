@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS heartbeats (
 CREATE TABLE IF NOT EXISTS incidents (
     id SERIAL PRIMARY KEY,
     host_id VARCHAR(100) NOT NULL REFERENCES hosts(host_id),
-    host_ts TIMESTAMPTZ NOT NULL,
+    host_timestamp TIMESTAMPTZ NOT NULL,
     received_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     type VARCHAR(100) NOT NULL,
     message TEXT NOT NULL
@@ -31,4 +31,4 @@ CREATE INDEX IF NOT EXISTS idx_hosts_created_at ON hosts (created_at DESC);
 
 CREATE INDEX IF NOT EXISTS idx_heartbeats_host_timestamp ON heartbeats (host_id, host_timestamp DESC);
 
-CREATE INDEX IF NOT EXISTS idx_incidents_host_ts ON incidents (host_id, host_ts DESC);
+CREATE INDEX IF NOT EXISTS idx_incidents_host_ts ON incidents (host_id, host_timestamp DESC);

@@ -6,12 +6,15 @@ const {
 
 const handleUpsertHost = async (req, res) => {
   try {
+    
     const { host, ip, eventType, eventTimestamp, eventDetails } = req.body;
 
     if (!host || !ip) {
       return res.status(400).json({ error: "host and ip are required" });
     }
-
+    if (!eventType || !eventTimestamp || !eventDetails) {
+      console.log("Warning one of the elements in req.body is empty", req.body);
+    }
     const result = await update_Host(
       host,
       ip,
@@ -19,7 +22,7 @@ const handleUpsertHost = async (req, res) => {
       eventTimestamp,
       eventDetails,
     );
-    console.log("info ", await getHostById(host));
+
     return res
       .status(201)
       .json({ data: await getHostById(host), message: result });
@@ -27,7 +30,7 @@ const handleUpsertHost = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "upsert_host",
+        event: "handleUpsertHost",
         message: error.message,
       }),
     );
@@ -37,14 +40,22 @@ const handleUpsertHost = async (req, res) => {
 
 const handleGetAllHosts = async (req, res) => {
   try {
-    const { limit } = req.body;
+    // let { limit } = req.body;
+
+    let limit = null;
+
+    if (req.body.limit) {
+      limit = parseInt(req.body.limit);
+    } else {
+      limit = 50;
+    }
     const hosts = await getAllHosts(limit);
     return res.status(200).json({ data: hosts });
   } catch (error) {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_all_hosts",
+        event: "handleGetAllHosts",
         message: error.message,
       }),
     );
@@ -67,7 +78,7 @@ const handleGetHostById = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_host_by_id",
+        event: "handleGetHostById",
         message: error.message,
       }),
     );

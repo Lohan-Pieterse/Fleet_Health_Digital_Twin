@@ -1,30 +1,8 @@
 const express = require("express");
-const { pool } = require("../config/db");
+
+const { healthHandler } = require("../controllers/server_Controller");
 
 const router = express.Router();
-// const {
-//   handleIngestHeartbeat,
-// } = require("../controllers/heartbeat_Controller");
-
-// router.post("/heartbeat", handleIngestHeartbeat);
-
-async function healthHandler(req, res) {
-  try {
-    await pool.query("SELECT 1");
-
-    res.status(200).json({
-      status: "ok",
-      db: "ok",
-      uptime: Math.floor(process.uptime()),
-    });
-  } catch (err) {
-    res.status(503).json({
-      status: "degraded",
-      db: "unreachable",
-      error: err.message,
-    });
-  }
-}
 
 router.get("/health", healthHandler);
 

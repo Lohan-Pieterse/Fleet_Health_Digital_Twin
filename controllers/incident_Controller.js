@@ -24,39 +24,7 @@ const handleIngestIncident = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "ingest_incident",
-        message: error.message,
-      }),
-    );
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-const handleGetIncidentsByHost = async (req, res) => {
-  try {
-    const { hostId } = req.params;
-    const limit = req.query.limit ? parseInt(req.query.limit) : 20;
-
-    if (isNaN(limit) || limit < 1) {
-      return res
-        .status(400)
-        .json({ error: "limit must be a positive integer" });
-    }
-
-    const incidents = await getIncidentsByHost(hostId, limit);
-
-    if (!incidents.length) {
-      return res
-        .status(404)
-        .json({ error: `No incidents found for host ${hostId}` });
-    }
-
-    return res.status(200).json({ data: incidents });
-  } catch (error) {
-    console.error(
-      JSON.stringify({
-        level: "error",
-        event: "get_incidents_by_host",
+        event: "handleIngestIncident",
         message: error.message,
       }),
     );
@@ -66,7 +34,12 @@ const handleGetIncidentsByHost = async (req, res) => {
 
 const handleGetRecentIncidents = async (req, res) => {
   try {
-    const limit = req.query.limit ? parseInt(req.query.limit) : 50;
+    let limit;
+    if (req.body.limit) {
+      limit = parseInt(req.query.limit);
+    } else {
+      limit = 50;
+    }
 
     if (isNaN(limit) || limit < 1) {
       return res
@@ -80,7 +53,7 @@ const handleGetRecentIncidents = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_recent_incidents",
+        event: "handleGetRecentIncidents",
         message: error.message,
       }),
     );
@@ -96,7 +69,7 @@ const handleGetLatestIncidentAllHosts = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_latest_incident_all_hosts",
+        event: "handleGetLatestIncidentAllHosts",
         message: error.message,
       }),
     );
@@ -104,9 +77,41 @@ const handleGetLatestIncidentAllHosts = async (req, res) => {
   }
 };
 
+// const handleGetIncidentsByHost = async (req, res) => {
+//   try {
+//     const { hostId } = req.params;
+//     const limit = req.body.limit ;
+
+//     if (isNaN(limit) || limit < 1) {
+//       return res
+//         .status(400)
+//         .json({ error: "limit must be a positive integer" });
+//     }
+
+//     const incidents = await getIncidentsByHost(hostId, limit);
+
+//     if (!incidents.length) {
+//       return res
+//         .status(404)
+//         .json({ error: `No incidents found for host ${hostId}` });
+//     }
+
+//     return res.status(200).json({ data: incidents });
+//   } catch (error) {
+//     console.error(
+//       JSON.stringify({
+//         level: "error",
+//         event: "handleGetIncidentsByHost",
+//         message: error.message,
+//       }),
+//     );
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+
 module.exports = {
   handleIngestIncident,
-  handleGetIncidentsByHost,
+  // handleGetIncidentsByHost,
   handleGetRecentIncidents,
   handleGetLatestIncidentAllHosts,
 };

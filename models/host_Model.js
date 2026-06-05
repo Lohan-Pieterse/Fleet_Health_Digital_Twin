@@ -28,6 +28,7 @@ const update_Host = async (
         console.error("Error processing host details:", error);
       }
     }
+
     console.log("Upserting host:", {
       hostId,
       ip,
@@ -35,6 +36,7 @@ const update_Host = async (
       timestamp,
       details,
     }); // Debug log
+
     const { rows } = await pool.query(
       `INSERT INTO hosts (host_id, ip, last_event_type, last_event_timestamp, last_event_details)
        VALUES ($1, $2, $3, $4, $5)
@@ -47,7 +49,7 @@ const update_Host = async (
     return rows[0];
   } catch (error) {
     console.error("Error upserting host:", error);
-    return error;
+    return null;
   }
 };
 
@@ -71,7 +73,7 @@ const getHostById = async (hostId) => {
       `SELECT * FROM hosts h WHERE h.host_id = $1 LIMIT 1`,
       [hostId],
     );
-    return rows[0] ?? null;
+    return rows[0];
   } catch (error) {
     console.error("Error fetching host by id:", error);
     return null;

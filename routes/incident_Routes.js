@@ -10,6 +10,5 @@ const {
 router.post("/error", handleIngestIncident);
 router.get("/", handleGetRecentIncidents);
 router.get("/latest", handleGetLatestIncidentAllHosts);
-// router.get('/:hostId', handleGetIncidentsByHost);
 
 module.exports = router;

@@ -16,6 +16,7 @@ const insertHeartbeat = async (
     return await getLatestHeartbeatByHost(hostId);
   } catch (error) {
     console.error("Error inserting heartbeat:", error);
+    return null;
   }
 };
 
@@ -31,6 +32,7 @@ const getLatestHeartbeatByHost = async (hostId) => {
     return rows[0] ?? null;
   } catch (error) {
     console.error("Error fetching latest heartbeat for host:", error);
+    return null;
   }
 };
 
@@ -45,6 +47,7 @@ const getLatestHeartbeatAllHosts = async () => {
     return rows;
   } catch (error) {
     console.error("Error fetching latest heartbeats for all hosts:", error);
+    return null;
   }
 };
 
@@ -68,6 +71,7 @@ const getHeartbeatHistory = async (hostId, limit = 50) => {
     return rows;
   } catch (error) {
     console.error("Error fetching heartbeat history:", error);
+    return null;
   }
 };
 

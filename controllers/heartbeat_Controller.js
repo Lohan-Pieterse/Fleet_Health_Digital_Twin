@@ -43,7 +43,7 @@ const handleIngestHeartbeat = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "ingest_heartbeat",
+        event: "handleIngestHeartbeat",
         message: error.message,
       }),
     );
@@ -68,7 +68,7 @@ const handleGetLatestHeartbeatByHost = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_latest_heartbeat_by_host",
+        event: "handleGetLatestHeartbeatByHost",
         message: error.message,
       }),
     );
@@ -84,7 +84,7 @@ const handleGetLatestHeartbeatAllHosts = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_latest_heartbeat_all_hosts",
+        event: "handleGetLatestHeartbeatAllHosts",
         message: error.message,
       }),
     );
@@ -95,7 +95,13 @@ const handleGetLatestHeartbeatAllHosts = async (req, res) => {
 const handleGetHeartbeatHistory = async (req, res) => {
   try {
     const { hostId } = req.params;
-    const limit = req.query.limit ? parseInt(req.query.limit) : 50;
+
+    let limit = null;
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit);
+    } else {
+      limit = 50;
+    }
 
     if (isNaN(limit) || limit < 1) {
       return res
@@ -109,7 +115,7 @@ const handleGetHeartbeatHistory = async (req, res) => {
     console.error(
       JSON.stringify({
         level: "error",
-        event: "get_heartbeat_history",
+        event: "handleGetHeartbeatHistory",
         message: error.message,
       }),
     );
