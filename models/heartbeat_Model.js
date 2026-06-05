@@ -22,9 +22,9 @@ const insertHeartbeat = async (
 const getLatestHeartbeatByHost = async (hostId) => {
   try {
     const { rows } = await pool.query(
-      `SELECT * FROM heartbeats
-       WHERE host_id = $1
-       ORDER BY host_timestamp DESC
+      `SELECT * FROM heartbeats INNER JOIN hosts ON heartbeats.host_id = hosts.host_id
+       WHERE heartbeats.host_id = $1
+       ORDER BY heartbeats.host_timestamp DESC
        LIMIT 1`,
       [hostId],
     );
@@ -50,6 +50,13 @@ const getLatestHeartbeatAllHosts = async () => {
 
 const getHeartbeatHistory = async (hostId, limit = 50) => {
   try {
+    // const { rows } = await pool.query(
+    //   `SELECT * FROM heartbeats
+    //    WHERE host_id = $1
+    //    ORDER BY host_timestamp DESC
+    //    LIMIT $2`,
+    //   [hostId, limit],
+    // );
     const { rows } = await pool.query(
       `SELECT * FROM heartbeats
        WHERE host_id = $1
@@ -57,6 +64,7 @@ const getHeartbeatHistory = async (hostId, limit = 50) => {
        LIMIT $2`,
       [hostId, limit],
     );
+
     return rows;
   } catch (error) {
     console.error("Error fetching heartbeat history:", error);

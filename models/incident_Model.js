@@ -46,9 +46,13 @@ const getLatestIncidentAllHosts = async () => {
   try {
     const { rows } = await pool.query(
       `SELECT DISTINCT ON (host_id)
-         host_id, host_ts, type, message, received_at
-       FROM incidents
-       ORDER BY host_id, host_ts DESC`,
+       host_id, 
+       host_ts, 
+       type, 
+       message, 
+       received_at
+FROM incidents
+ORDER BY host_id, host_ts DESC;`,
     );
     return rows;
   } catch (error) {

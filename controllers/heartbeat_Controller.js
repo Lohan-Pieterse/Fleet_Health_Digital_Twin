@@ -6,32 +6,30 @@ const {
 } = require("../models/heartbeat_Model");
 const { update_Host } = require("../models/host_Model");
 
+/*
+   handleIngestHeartbeat,
+  handleGetLatestHeartbeatByHost,
+  handleGetLatestHeartbeatAllHosts,
+*/
+
 const handleIngestHeartbeat = async (req, res) => {
   try {
-    /*
-{
-"host": "api-01",
-"timestamp": "2025-03-10T15:04:05Z",
-"cpu_load": 0.42,
-"mem_used_mb": 512,
-"services": [
-{"name": "api", "healthy": true},
-{"name": "worker", "healthy": false}
-],
-"ip": "10.0.0.21"
-}
-*/
     const { host, timestamp, cpu_load, mem_used_mb, services, ip } = req.body;
-
+    console.log("Received heartbeat:", {
+      host,
+      timestamp,
+      cpu_load,
+      mem_used_mb,
+      services,
+      ip,
+    });
     if (!host || !timestamp || cpu_load == null || mem_used_mb == null || !ip) {
-      return res
-        .status(400)
-        .json({
-          error: "host, timestamp, cpu_load, mem_used_mb and ip are required",
-        });
+      return res.status(400).json({
+        error: "host, timestamp, cpu_load, mem_used_mb and ip are required",
+      });
     }
 
-    await update_Host(host, ip);
+    await update_Host(host, ip, "heartbeat", timestamp, services);
     const heartbeat = await insertHeartbeat(
       host,
       timestamp,

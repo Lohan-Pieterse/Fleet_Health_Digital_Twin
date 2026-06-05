@@ -4,19 +4,25 @@ const {
   getHostById,
 } = require("../models/host_Model");
 
-const getHello = async (req, res) => {
-  res.send({ message: "Hello World! for api Lowhammms" });
-};
 const handleUpsertHost = async (req, res) => {
   try {
-    const { host, ip } = req.body;
+    const { host, ip, eventType, eventTimestamp, eventDetails } = req.body;
 
     if (!host || !ip) {
       return res.status(400).json({ error: "host and ip are required" });
     }
 
-    const result = await update_Host(host, ip);
-    return res.status(201).json({ data: result });
+    const result = await update_Host(
+      host,
+      ip,
+      eventType,
+      eventTimestamp,
+      eventDetails,
+    );
+    console.log("info ", await getHostById(host));
+    return res
+      .status(201)
+      .json({ data: await getHostById(host), message: result });
   } catch (error) {
     console.error(
       JSON.stringify({
@@ -31,7 +37,8 @@ const handleUpsertHost = async (req, res) => {
 
 const handleGetAllHosts = async (req, res) => {
   try {
-    const hosts = await getAllHosts();
+    const { limit } = req.body;
+    const hosts = await getAllHosts(limit);
     return res.status(200).json({ data: hosts });
   } catch (error) {
     console.error(
@@ -72,5 +79,4 @@ module.exports = {
   handleUpsertHost,
   handleGetAllHosts,
   handleGetHostById,
-  getHello,
 };

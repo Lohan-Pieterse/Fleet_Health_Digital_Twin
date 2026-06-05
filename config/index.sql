@@ -2,6 +2,9 @@
 CREATE TABLE IF NOT EXISTS hosts (
     host_id VARCHAR(100) PRIMARY KEY,
     ip INET NOT NULL,
+    last_event_type VARCHAR(50),
+    last_event_timestamp TIMESTAMPTZ,
+    last_event_details JSONB,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 

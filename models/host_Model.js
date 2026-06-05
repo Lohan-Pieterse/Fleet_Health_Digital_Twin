@@ -1,43 +1,66 @@
-// const pool = require("../config/db");
 const { pool } = require("../config/db");
 
-const setupDatabase = async () => {
-  try {
-    return await pool.query(
-      `CREATE TABLE IF NOT EXISTS hosts (
-      id SERIAL PRIMARY KEY, 
-      hostname VARCHAR(255) UNIQUE NOT NULL, 
-      last_heartbeat TIMESTAMP NOT NULL
-    )`,
-    );
-  } catch (error) {
-    console.error("Error setting up database:", error);
-  }
-};
+/*
+ update_Host,
+  getAllHosts,
+  getHostById,
+*/
 
-const update_Host = async (hostId, ip) => {
+const update_Host = async (
+  hostId,
+  ip,
+  eventType = null,
+  timestamp = null,
+  details = null,
+) => {
+  /*
+   host_id VARCHAR(100) PRIMARY KEY,
+    ip INET NOT NULL,
+    last_event_type VARCHAR(50),
+    last_event_timestamp TIMESTAMPTZ,
+    last_event_details JSONB,
+  */
   try {
+    if (details !== null) {
+      try {
+        details = JSON.stringify(details);
+      } catch (error) {
+        console.error("Error processing host details:", error);
+      }
+    }
+    console.log("Upserting host:", {
+      hostId,
+      ip,
+      eventType,
+      timestamp,
+      details,
+    }); // Debug log
     const { rows } = await pool.query(
-      `INSERT INTO hosts (host_id, ip)
-       VALUES ($1, $2)
+      `INSERT INTO hosts (host_id, ip, last_event_type, last_event_timestamp, last_event_details)
+       VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (host_id)
-       DO UPDATE SET ip = EXCLUDED.ip`,
-      [hostId, ip],
+       DO UPDATE SET ip = EXCLUDED.ip, last_event_type = EXCLUDED.last_event_type,
+       last_event_timestamp = EXCLUDED.last_event_timestamp, 
+       last_event_details = EXCLUDED.last_event_details`,
+      [hostId, ip, eventType, timestamp, details],
     );
     return rows[0];
   } catch (error) {
     console.error("Error upserting host:", error);
+    return error;
   }
 };
 
-const getAllHosts = async () => {
+const getAllHosts = async (limit) => {
   try {
     const { rows } = await pool.query(
-      `SELECT * FROM hosts ORDER BY created_at DESC`,
+      `SELECT * FROM hosts ORDER BY created_at DESC LIMIT $1`,
+      [limit],
     );
     return rows;
   } catch (error) {
     console.error("Error fetching all hosts:", error);
+    return null;
   }
 };
 
@@ -45,25 +68,19 @@ const getHostById = async (hostId) => {
   try {
     console.log("Fetching host by id:", hostId); // Debug log
     const { rows } = await pool.query(
-      `SELECT * FROM hosts h JOIN heartbeats hb ON h.host_id = hb.host_id WHERE h.host_id = $1 ORDER BY hb.host_timestamp DESC LIMIT 1`,
+      `SELECT * FROM hosts h WHERE h.host_id = $1 LIMIT 1`,
       [hostId],
     );
     return rows[0] ?? null;
   } catch (error) {
     console.error("Error fetching host by id:", error);
+    return null;
   }
 };
 
-const updateHeartbeat = async (hostname) => {
-  try {
-    return await pool.query(
-      `INSERT INTO hosts (hostname, last_heartbeat) VALUES ($1, $2)
-     ON CONFLICT (hostname) DO UPDATE SET last_heartbeat = EXCLUDED.last_heartbeat`,
-      [hostname, new Date()],
-    );
-  } catch (error) {
-    console.error("Error updating heartbeat:", error);
-  }
+module.exports = {
+  update_Host,
+  getAllHosts,
+  getHostById,
+  // GetLatestDataByHostId,
 };
-
-module.exports = { update_Host, getAllHosts, getHostById };

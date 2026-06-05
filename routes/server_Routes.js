@@ -1,4 +1,6 @@
 const express = require("express");
+const { pool } = require("../config/db");
+
 const router = express.Router();
 const {
   handleIngestHeartbeat,
@@ -9,7 +11,7 @@ router.post("/heartbeat", handleIngestHeartbeat);
 // routes/health.js
 async function healthHandler(req, res) {
   try {
-    await db.query("SELECT 1"); // lightweight DB ping
+    await pool.query("SELECT 1");
 
     res.status(200).json({
       status: "ok",
