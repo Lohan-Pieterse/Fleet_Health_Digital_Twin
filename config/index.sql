@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS heartbeats (
 
 CREATE TABLE IF NOT EXISTS incidents (
     id SERIAL PRIMARY KEY,
-    host_id VARCHAR(255) NOT NULL REFERENCES hosts(host_id),
+    host_id VARCHAR(100) NOT NULL REFERENCES hosts(host_id),
     host_ts TIMESTAMPTZ NOT NULL,
     received_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     type VARCHAR(100) NOT NULL,

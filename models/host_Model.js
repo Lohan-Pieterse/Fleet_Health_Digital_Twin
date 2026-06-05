@@ -21,8 +21,7 @@ const update_Host = async (hostId, ip) => {
       `INSERT INTO hosts (host_id, ip)
        VALUES ($1, $2)
        ON CONFLICT (host_id)
-       DO UPDATE SET ip = EXCLUDED.ip
-       RETURNING *`,
+       DO UPDATE SET ip = EXCLUDED.ip`,
       [hostId, ip],
     );
     return rows[0];
@@ -44,8 +43,9 @@ const getAllHosts = async () => {
 
 const getHostById = async (hostId) => {
   try {
+    console.log("Fetching host by id:", hostId); // Debug log
     const { rows } = await pool.query(
-      `SELECT * FROM hosts WHERE host_id = $1`,
+      `SELECT * FROM hosts h JOIN heartbeats hb ON h.host_id = hb.host_id WHERE h.host_id = $1 ORDER BY hb.host_timestamp DESC LIMIT 1`,
       [hostId],
     );
     return rows[0] ?? null;

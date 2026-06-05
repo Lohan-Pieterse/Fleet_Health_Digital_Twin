@@ -8,7 +8,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./config/index.sql:/docker-entrypoint-initdb.d/index.sql
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   app:
     build: .
     image: fleet_health_digital_twin
@@ -19,5 +24,18 @@ services:
       - /app/node_modules
     environment:
       - DB_HOST=db
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
 volumes:
   postgres_data:

@@ -4,8 +4,7 @@ const insertIncident = async (hostId, hostTs, type, message) => {
   try {
     const { rows } = await pool.query(
       `INSERT INTO incidents (host_id, host_ts, type, message)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
+       VALUES ($1, $2, $3, $4)`,
       [hostId, hostTs, type, message],
     );
     return rows[0];

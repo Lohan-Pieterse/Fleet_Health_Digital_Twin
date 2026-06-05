@@ -1,5 +1,5 @@
 const { insertIncident, getIncidentsByHost, getRecentIncidents, getLatestIncidentAllHosts } = require('../models/incident_Model');
-const { upsertHost } = require('../models/host_Model');
+const { update_Host } = require('../models/host_Model');
 
 const handleIngestIncident = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ const handleIngestIncident = async (req, res) => {
       return res.status(400).json({ error: 'host, timestamp, type, message and ip are required' });
     }
 
-    await upsertHost(host, ip);
+    await update_Host(host, ip);
     const incident = await insertIncident(host, timestamp, type, message);
 
     return res.status(201).json({ data: incident });

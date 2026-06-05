@@ -10,11 +10,10 @@ const insertHeartbeat = async (
   try {
     const { rows } = await pool.query(
       `INSERT INTO heartbeats (host_id, host_timestamp, cpu_load, mem_used_mb, services)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING *`,
+       VALUES ($1, $2, $3, $4, $5)`,
       [hostId, hostTimestamp, cpuLoad, memUsedMb, JSON.stringify(services)],
     );
-    return rows[0];
+    return await getLatestHeartbeatByHost(hostId);
   } catch (error) {
     console.error("Error inserting heartbeat:", error);
   }
