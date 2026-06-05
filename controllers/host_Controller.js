@@ -6,8 +6,8 @@ const {
 
 const handleUpsertHost = async (req, res) => {
   try {
-    
-    const { host, ip, eventType, eventTimestamp, eventDetails } = req.body;
+    const { host, ip, eventType, eventTimestamp, eventDetails, status } =
+      req.body;
 
     if (!host || !ip) {
       return res.status(400).json({ error: "host and ip are required" });
@@ -21,6 +21,7 @@ const handleUpsertHost = async (req, res) => {
       eventType,
       eventTimestamp,
       eventDetails,
+      status,
     );
 
     return res
@@ -42,12 +43,10 @@ const handleGetAllHosts = async (req, res) => {
   try {
     // let { limit } = req.body;
 
-    let limit = null;
+    let limit = 50;
 
-    if (req.body.limit) {
-      limit = parseInt(req.body.limit);
-    } else {
-      limit = 50;
+    if (req.body?.limit) {
+      limit = parseInt(req.body.limit, 10);
     }
     const hosts = await getAllHosts(limit);
     return res.status(200).json({ data: hosts });

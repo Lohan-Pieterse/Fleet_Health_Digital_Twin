@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS hosts (
     last_event_type VARCHAR(50),
     last_event_timestamp TIMESTAMPTZ,
     last_event_details JSONB,
+    status varchar(100),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -31,4 +32,4 @@ CREATE INDEX IF NOT EXISTS idx_hosts_created_at ON hosts (created_at DESC);
 
 CREATE INDEX IF NOT EXISTS idx_heartbeats_host_timestamp ON heartbeats (host_id, host_timestamp DESC);
 
-CREATE INDEX IF NOT EXISTS idx_incidents_host_ts ON incidents (host_id, host_timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_incidents_host_ts ON incidents (host_id, host_timestamp DESC)

@@ -12,6 +12,7 @@ const update_Host = async (
   eventType = null,
   timestamp = null,
   details = null,
+  status = null,
 ) => {
   /*
    host_id VARCHAR(100) PRIMARY KEY,
@@ -35,16 +36,20 @@ const update_Host = async (
       eventType,
       timestamp,
       details,
+      status,
     }); // Debug log
 
     const { rows } = await pool.query(
-      `INSERT INTO hosts (host_id, ip, last_event_type, last_event_timestamp, last_event_details)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO hosts (host_id, ip, last_event_type, last_event_timestamp, last_event_details, status)
+       VALUES ($1, $2, $3, $4, $5, $6)
        ON CONFLICT (host_id)
        DO UPDATE SET ip = EXCLUDED.ip, last_event_type = EXCLUDED.last_event_type,
        last_event_timestamp = EXCLUDED.last_event_timestamp, 
-       last_event_details = EXCLUDED.last_event_details`,
-      [hostId, ip, eventType, timestamp, details],
+       last_event_details = EXCLUDED.last_event_details,
+       status = EXCLUDED.status
+       RETURNING *;
+       `,
+      [hostId, ip, eventType, timestamp, details, status],
     );
     return rows[0];
   } catch (error) {

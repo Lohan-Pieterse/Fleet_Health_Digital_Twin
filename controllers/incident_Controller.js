@@ -16,7 +16,7 @@ const handleIngestIncident = async (req, res) => {
         .json({ error: "host, timestamp, type, message and ip are required" });
     }
 
-    await update_Host(host, ip, "incident", timestamp, message);
+    await update_Host(host, ip, "incident", timestamp, message,"unhealthy");
     const incident = await insertIncident(host, timestamp, type, message);
 
     return res.status(201).json({ data: await getIncidentsByHost(host, 1) });
@@ -34,11 +34,9 @@ const handleIngestIncident = async (req, res) => {
 
 const handleGetRecentIncidents = async (req, res) => {
   try {
-    let limit;
-    if (req.body.limit) {
-      limit = parseInt(req.query.limit);
-    } else {
-      limit = 50;
+    let limit = 50;
+    if (req.body?.limit) {
+      limit = parseInt(req.body.limit, 10);
     }
 
     if (isNaN(limit) || limit < 1) {

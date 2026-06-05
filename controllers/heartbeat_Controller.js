@@ -29,7 +29,7 @@ const handleIngestHeartbeat = async (req, res) => {
       });
     }
 
-    await update_Host(host, ip, "heartbeat", timestamp, services);
+    await update_Host(host, ip, "heartbeat", timestamp, services,"healthy");
     const heartbeat = await insertHeartbeat(
       host,
       timestamp,
@@ -96,11 +96,9 @@ const handleGetHeartbeatHistory = async (req, res) => {
   try {
     const { hostId } = req.params;
 
-    let limit = null;
-    if (req.query.limit) {
-      limit = parseInt(req.query.limit);
-    } else {
-      limit = 50;
+    let limit = 50;
+    if (req.body?.limit) {
+      limit = parseInt(req.body.limit, 10);
     }
 
     if (isNaN(limit) || limit < 1) {
