@@ -17,7 +17,7 @@ FROM node:20-alpine AS production
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci 
 
 COPY --from=builder /app/server.js ./
 COPY --from=builder /app/config ./config
@@ -32,4 +32,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD wget -qO- http://localhost:3000/api/server/health || exit 1
 
-CMD ["npm","run" "dev"]
+CMD ["npx", "nodemon", "-L", "server.js"]

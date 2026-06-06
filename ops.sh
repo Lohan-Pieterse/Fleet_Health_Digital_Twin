@@ -77,7 +77,7 @@ EOF
             SERVICE="nginx"
             EXIT_CODE=1
             
-            echo "  Sending incident error for $HOST ($IP)..."
+            # echo "  Sending incident error for $HOST ($IP)..."
             
         JSON_PAYLOAD=$(cat <<EOF
 {
@@ -113,7 +113,7 @@ EOF
                 
                 
                 echo -e '\n\nGetting all hosts summary\n\n'
-                curl -X GET $APP_URL/api/hosts/
+                curl -X GET $APP_URL/api/hosts/summary
                 # ------------------------------------------------------------
                 echo -e '\n\nGetting heartbeat history for server-01\n\n'
                 curl -X GET "$APP_URL/api/heartbeat/history/server-01?limit=5"

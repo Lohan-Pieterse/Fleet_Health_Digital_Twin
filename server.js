@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { pool } = require("./config/db");
+
 const express = require("express");
 
 // const pool = require("./db");
@@ -13,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello World!ss");
+  res.send("Digital Twin home screen");
 });
 
 app.use("/api/hosts", require("./routes/host_Routes"));
